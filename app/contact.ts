@@ -1,14 +1,23 @@
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
+import { APIGatewayProxyEvent, Context, APIGatewayProxyResult } from "aws-lambda";
+import { craftErrorResponse } from "./helpers/lambda.helper";
+import { ContactForm } from "./interfaces/contact-form.interface";
+import sendContactForm from "./services/mail.service";
 
 export async function postContactForm(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
-    console.log(event);
-    return {
-        statusCode: 200,
-        body: JSON.stringify({
-            hello: 'there'
-        }),
-        headers: {
-            sampleHeader: 'wassup'
+    try {
+        let contactForm: ContactForm = JSON.parse(event.body as string);
+        await sendContactForm(contactForm);
+        return {
+            statusCode: 200,
+            body: JSON.stringify({
+                hello: 'there'
+            }),
+            headers: {
+                sampleHeader: 'wassup'
+            }
         }
+    } catch (e) {
+        return craftErrorResponse(e, event);
     }
+    
 }
