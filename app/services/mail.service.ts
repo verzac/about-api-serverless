@@ -2,7 +2,7 @@ import { ContactForm } from "../interfaces/contact-form.interface";
 import AWS from 'aws-sdk';
 import { BadRequestError } from "../commons/errors";
 
-export default async function sendContactForm(contactForm: ContactForm) {
+export async function sendContactForm(contactForm: ContactForm) {
     validateContactForm(contactForm);
     const sns = new AWS.SNS();
     let snsTopic: string;
