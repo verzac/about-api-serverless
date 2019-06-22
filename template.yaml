@@ -4,30 +4,43 @@ Description: >
     sam-app
 
     Sample SAM Template for sam-app
-    
+
+Parameters:
+    EmailSnsTopicArnPredefined:
+        Type: String
+        Default: arn:aws:sns:ap-southeast-2:126578846119:about-api-contact-form-dev
+
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
     Function:
-        Timeout: 3
+        Timeout: 10
+        Environment:
+            Variables:
+                EMAIL_SNS_TOPIC: !Ref EmailSns
+                EMAIL_SNS_TOPIC_PREDEFINED: !Ref EmailSnsTopicArnPredefined
 
 
 Resources:
-
-    HelloWorldFunction:
-        Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    SubmitContactFormFunction:
+        Type: AWS::Serverless::Function
         Properties:
             CodeUri: dist/
-            Handler: app.lambdaHandler
-            Runtime: nodejs8.10
-            Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
-                Variables:
-                    PARAM1: VALUE
+            Handler: contact.postContactForm
+            Runtime: nodejs10.x
             Events:
-                HelloWorld:
-                    Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+                SubmitContactForm:
+                    Type: Api
                     Properties:
-                        Path: /hello
-                        Method: get
+                        Path: /contact
+                        Method: post
+    
+    EmailSns:
+        Type: AWS::SNS::Topic
+        Properties:
+            TopicName: about-api-contact-form
+            Subscription:
+                Endpoint: benjamin.tanone@gmail.com
+                Protocol: email
 
 Outputs:
 
