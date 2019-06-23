@@ -10,12 +10,8 @@ export async function postContactForm(event: APIGatewayProxyEvent): Promise<APIG
         return {
             statusCode: 204,
             body: "",
-            headers: {
-                sampleHeader: 'wassup'
-            }
         }
     } catch (e) {
         return craftErrorResponse(e, event);
     }
-
 }
