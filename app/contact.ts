@@ -1,5 +1,5 @@
 import { APIGatewayProxyEvent, Context, APIGatewayProxyResult } from "aws-lambda";
-import { craftErrorResponse } from "./helpers/lambda.helper";
+import { craftErrorResponse, withCors } from "./helpers/lambda.helper";
 import { ContactForm } from "./interfaces/contact-form.interface";
 import { sendContactForm } from "./services/mail.service";
 
@@ -15,3 +15,5 @@ export async function postContactForm(event: APIGatewayProxyEvent): Promise<APIG
         return craftErrorResponse(e, event);
     }
 }
+
+export const handler = withCors(postContactForm);

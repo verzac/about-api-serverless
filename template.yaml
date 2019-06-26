@@ -25,7 +25,7 @@ Resources:
         Type: AWS::Serverless::Function
         Properties:
             CodeUri: dist/
-            Handler: contact.postContactForm
+            Handler: contact.handler
             Runtime: nodejs10.x
             Events:
                 SubmitContactForm:
@@ -34,24 +34,29 @@ Resources:
                         Path: /contact
                         Method: post
     
-    EmailSns:
-        Type: AWS::SNS::Topic
+    CorsFunction:
+        Type: AWS::Serverless::Function
         Properties:
-            TopicName: about-api-contact-form
-            Subscription:
-                Endpoint: benjamin.tanone@gmail.com
-                Protocol: email
+            CodeUri: dist/
+            Handler: cors.corsHandler
+            Runtime: nodejs10.x
+            Events:
+                SubmitContactForm:
+                    Type: Api
+                    Properties:
+                        Path: /{proxy+}
+                        Method: options
+
+    # EmailSns:
+    #     Type: AWS::SNS::Topic
+    #     Properties:
+    #         TopicName: about-api-contact-form
+    #         Subscription:
+    #             Endpoint: benjamin.tanone@gmail.com
+    #             Protocol: email
 
 Outputs:
+    ApiBasePath:
+      Description: "API Gateway endpoint URL for Prod stage"
+      Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod"
 
-    HelloWorldApi:
-      Description: "API Gateway endpoint URL for Prod stage for Hello World function"
-      Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
-
-    HelloWorldFunction:
-      Description: "Hello World Lambda Function ARN"
-      Value: !GetAtt HelloWorldFunction.Arn
-
-    HelloWorldFunctionIamRole:
-      Description: "Implicit IAM Role created for Hello World function"
-      Value: !GetAtt HelloWorldFunctionRole.Arn
