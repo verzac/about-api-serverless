@@ -16,7 +16,7 @@ Globals:
         Timeout: 10
         Environment:
             Variables:
-                EMAIL_SNS_TOPIC: !Ref EmailSns
+                # EMAIL_SNS_TOPIC: !Ref EmailSns
                 EMAIL_SNS_TOPIC_PREDEFINED: !Ref EmailSnsTopicArnPredefined
 
 
