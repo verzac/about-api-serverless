@@ -1,7 +1,7 @@
 set -xe
 
 TEMPLATE_FILENAME="template.yaml"
-S3_BUCKET_NAME="about-api-serverless"
+S3_BUCKET_NAME="about-api-serverless-prod"
 PACKAGED_TEMPLATE_FILENAME="packaged.yaml"
 AWSCLI_ARGS=""
 PARAMETER_OVERRIDES_ARG=""
