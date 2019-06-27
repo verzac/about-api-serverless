@@ -6,9 +6,10 @@ Description: >
     Sample SAM Template for sam-app
 
 Parameters:
-    EmailSnsTopicArnPredefined:
+    EmailSnsTopicNamePredefined:
         Type: String
-        Default: arn:aws:sns:ap-southeast-2:126578846119:about-api-contact-form-dev
+        Description: Name of the SNS topic which contains my email as a subscriber
+        Default: about-api-contact-form-dev
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
@@ -17,7 +18,7 @@ Globals:
         Environment:
             Variables:
                 # EMAIL_SNS_TOPIC: !Ref EmailSns
-                EMAIL_SNS_TOPIC_PREDEFINED: !Ref EmailSnsTopicArnPredefined
+                EMAIL_SNS_TOPIC_PREDEFINED: !Sub "arn:${AWS::Partition}:sns:${AWS::Region}:${AWS::AccountId}:${EmailSnsTopicNamePredefined}"
 
 
 Resources:
@@ -33,7 +34,10 @@ Resources:
                     Properties:
                         Path: /contact
                         Method: post
-    
+            Policies:
+                - SNSPublishMessagePolicy:
+                    TopicName: !Ref EmailSnsTopicNamePredefined
+
     CorsFunction:
         Type: AWS::Serverless::Function
         Properties:
