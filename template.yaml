@@ -27,7 +27,7 @@ Resources:
         Properties:
             CodeUri: dist/
             Handler: contact.handler
-            Runtime: nodejs10.x
+            Runtime: nodejs14.x
             Events:
                 SubmitContactForm:
                     Type: Api
@@ -43,7 +43,7 @@ Resources:
         Properties:
             CodeUri: dist/
             Handler: cors.corsHandler
-            Runtime: nodejs10.x
+            Runtime: nodejs14.x
             Events:
                 SubmitContactForm:
                     Type: Api
